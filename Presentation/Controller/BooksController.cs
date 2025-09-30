@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
@@ -22,96 +23,51 @@ namespace Presentation.Controller
         [HttpGet("[action]")]
         public IActionResult GetAllBooks()
         {
-            try
-            {
-                var books = _manager.BookService.GetAllBooks(false);
-
-                return Ok(books);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            var books = _manager.BookService.GetAllBooks(false);
+            return Ok(books);
         }
 
 
         [HttpGet("[action]/{id:int}")]
         public IActionResult GetOneBook([FromRoute(Name = "id")] int id)
         {
-            try
-            {
-                var book = _manager.BookService.GetOneBookById(id, false);
-
-                if (book is null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(book);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            var book = _manager.BookService.GetOneBookById(id, false);
+            return Ok(book);
         }
 
         [HttpPost("[action]")]
         public IActionResult CreateBook([FromBody] Book book)
         {
-            try
-            {
-                if (book is null)
-                    return BadRequest();
 
-                _manager.BookService.CreateOneBook(book);
+            if (book is null)
+                return BadRequest();
 
-                // 201 Created + eklenen kaydın kendisi
-                return CreatedAtAction(nameof(GetOneBook), new { id = book.Id }, book);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new
-                {
-                    Message = "Kitap eklenirken bir hata oluştu.",
-                    Error = ex.Message
-                });
-            }
+            _manager.BookService.CreateOneBook(book);
+
+            // 201 Created + eklenen kaydın kendisi
+            return CreatedAtAction(nameof(GetOneBook), new { id = book.Id }, book);
+
         }
 
         [HttpPut("[action]/{id:int}")]
         public IActionResult UpdateBook([FromRoute] int id, [FromBody] Book book)
         {
-            try
-            {
-                if (book is null)
-                    return NotFound();
 
-                _manager.BookService.UpdateOneBook(id, book, true);
+            if (book is null)
+                return NotFound();
 
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            _manager.BookService.UpdateOneBook(id, book, true);
+
+            return NoContent();
         }
 
         [HttpDelete("[action]/{id:int}")]
         public IActionResult DeleteBook([FromRoute] int id)
         {
-            try
-            {
-                _manager.BookService.DeleteOneBook(id, false);
+            _manager.BookService.DeleteOneBook(id, false);
 
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return NoContent();
         }
-
-
 
     }
 }
