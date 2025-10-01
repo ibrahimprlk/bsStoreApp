@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.DataTransferObjects;
 using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -50,13 +51,13 @@ namespace Presentation.Controller
         }
 
         [HttpPut("[action]/{id:int}")]
-        public IActionResult UpdateBook([FromRoute] int id, [FromBody] Book book)
+        public IActionResult UpdateBook([FromRoute] int id, [FromBody] BookDtoForUpdate bookDto)
         {
 
-            if (book is null)
+            if (bookDto is null)
                 return NotFound();
 
-            _manager.BookService.UpdateOneBook(id, book, true);
+            _manager.BookService.UpdateOneBook(id, bookDto, true);
 
             return NoContent();
         }
