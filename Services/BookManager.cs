@@ -42,9 +42,10 @@ namespace Services
             _repositoryManager.Save();
         }
 
-        public IEnumerable<Book> GetAllBooks(bool trackChanges)
+        public IEnumerable<BookDto> GetAllBooks(bool trackChanges)
         {
-            return _repositoryManager.Book.GetAll(trackChanges);
+            var books = _repositoryManager.Book.GetAll(trackChanges);
+            return _mapper.Map<IEnumerable<BookDto>>(books);
         }
 
         public Book GetOneBookById(int id, bool trackChanges)

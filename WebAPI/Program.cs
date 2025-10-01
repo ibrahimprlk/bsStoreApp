@@ -1,12 +1,20 @@
 using NLog;
 using Services.Contracts;
+using WebApi.Extensions;
 using WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
-builder.Services.AddControllers().AddApplicationPart(typeof(Presentation.AssemblyRefence).Assembly);
+builder.Services.AddControllers(config =>
+{
+    config.RespectBrowserAcceptHeader = true;
+    config.ReturnHttpNotAcceptable=true;
+})
+    .AddCustomCsvFormatter()
+    .AddXmlDataContractSerializerFormatters()
+    .AddApplicationPart(typeof(Presentation.AssemblyRefence).Assembly);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
