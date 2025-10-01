@@ -37,16 +37,18 @@ namespace Presentation.Controller
         }
 
         [HttpPost("[action]")]
-        public IActionResult CreateBook([FromBody] Book book)
+        public IActionResult CreateBook([FromBody] BookDtoForInsertion bookDto)
         {
 
-            if (book is null)
+            if (bookDto is null)
                 return BadRequest();
 
-            _manager.BookService.CreateOneBook(book);
+            if(!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
 
-            // 201 Created + eklenen kaydın kendisi
-            return CreatedAtAction(nameof(GetOneBook), new { id = book.Id }, book);
+            var book = _manager.BookService.CreateOneBook(bookDto);
+
+            return StatusCode(201, book);
 
         }
 
@@ -57,7 +59,10 @@ namespace Presentation.Controller
             if (bookDto is null)
                 return NotFound();
 
-            _manager.BookService.UpdateOneBook(id, bookDto, true);
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
+            _manager.BookService.UpdateOneBook(id, bookDto, false);
 
             return NoContent();
         }
