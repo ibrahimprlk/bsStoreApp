@@ -18,9 +18,9 @@ namespace Repositories.EFCore
             _context = context;
         }
 
-        public void Create(T entity)
+        public async Task CreateAsync(T entity)
         {
-            _context.Set<T>().Add(entity);
+            await _context.Set<T>().AddAsync(entity);
         }
 
         public void Delete(T entity)

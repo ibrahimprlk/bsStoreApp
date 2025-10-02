@@ -22,7 +22,7 @@ namespace Repositories.EFCore
 
         public async Task SaveAsync()
         {
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
     }
 }

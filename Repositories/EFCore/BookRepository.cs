@@ -16,9 +16,9 @@ namespace Repositories.EFCore
 
         }
 
-        public void CreateOneBook(Book book)
+        public async Task CreateOneBookAsync(Book book)
         {
-            Create(book);
+             await CreateAsync(book);
         }
 
         public void DeleteOneBook(Book book)

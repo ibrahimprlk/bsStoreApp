@@ -11,7 +11,7 @@ namespace Repositories.Contracts
     {
         Task<IEnumerable<Book>> GetAllAsync(bool trackChanges);
         Task<Book> GetOneBookByIdAsync(int id, bool trackChanges);
-        void CreateOneBook(Book book);
+        Task CreateOneBookAsync(Book book);
         void UpdateOneBook(Book book);
         void DeleteOneBook(Book book);
     }

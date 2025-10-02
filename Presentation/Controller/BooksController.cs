@@ -7,10 +7,12 @@ using Entities.DataTransferObjects;
 using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.ActionFilters;
 using Services.Contracts;
 
 namespace Presentation.Controller
 {
+    [ServiceFilter(typeof(LogFilterAttribute))]
     [Route("api/[controller]")]
     [ApiController]
     public class BooksController : ControllerBase
@@ -28,7 +30,7 @@ namespace Presentation.Controller
             return Ok(books);
         }
 
-
+      
         [HttpGet("[action]/{id:int}")]
         public async Task<IActionResult> GetOneBookAsync([FromRoute(Name = "id")] int id)
         {
@@ -36,34 +38,21 @@ namespace Presentation.Controller
             return Ok(book);
         }
 
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateBookAsync([FromBody] BookDtoForInsertion bookDto)
         {
 
-            if (bookDto is null)
-                return BadRequest();
-
-            if(!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
-
             var book = await _manager.BookService.CreateOneBookAsync(bookDto);
-
             return StatusCode(201, book);
 
         }
 
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPut("[action]/{id:int}")]
         public async Task<IActionResult> UpdateBookAsync([FromRoute] int id, [FromBody] BookDtoForUpdate bookDto)
         {
-
-            if (bookDto is null)
-                return NotFound();
-
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
-
             await _manager.BookService.UpdateOneBookAsync(id, bookDto, false);
-
             return NoContent();
         }
 
