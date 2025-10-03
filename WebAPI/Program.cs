@@ -27,14 +27,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("OpenPolicy",
-       policy => policy
-           .AllowAnyOrigin()
-           .AllowAnyMethod()
-           .AllowAnyHeader());
-});
+
 
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureRepositoryManager();
@@ -42,6 +35,7 @@ builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureLoggerService();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.ConfigureActionFilters();
+builder.Services.ConfigureCors();
 
 var app = builder.Build();
 
@@ -62,7 +56,7 @@ if (app.Environment.IsProduction())
 
 app.UseHttpsRedirection();
 
-app.UseCors("OpenPolicy");
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 

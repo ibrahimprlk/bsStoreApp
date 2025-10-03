@@ -33,5 +33,19 @@ namespace WebAPI.Extensions
             services.AddSingleton<LogFilterAttribute>();
             //services.AddScoped<ValidateMediaTypeAttribute>();
         }
+
+        public static void ConfigureCors(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithExposedHeaders("X-Pagination")
+                );
+            });
+        }
+
     }
 }
