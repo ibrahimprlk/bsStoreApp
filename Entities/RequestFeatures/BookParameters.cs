@@ -12,7 +12,7 @@ namespace Entities.RequestFeatures
         public uint MaxPrice { get; set; } = 1000;
         public bool ValidPriceRange => MaxPrice > MinPrice;
 
-        //public String? SearchTerm { get; set; }
+        public String? SearchTerm { get; set; }
 
         //public BookParameters()
         //{
