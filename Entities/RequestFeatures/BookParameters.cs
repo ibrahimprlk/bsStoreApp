@@ -14,9 +14,9 @@ namespace Entities.RequestFeatures
 
         public String? SearchTerm { get; set; }
 
-        //public BookParameters()
-        //{
-        //    OrderBy = "id";
-        //}
+        public BookParameters()
+        {
+            OrderBy = "id";
+        }
     }
 }
