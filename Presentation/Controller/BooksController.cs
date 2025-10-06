@@ -15,6 +15,7 @@ using Services.Contracts;
 
 namespace Presentation.Controller
 {
+   // [ApiVersion("1.0")]
     [ServiceFilter(typeof(LogFilterAttribute))]
     [Route("api/[controller]")]
     [ApiController]
