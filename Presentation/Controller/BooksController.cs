@@ -8,6 +8,7 @@ using Entities.DataTransferObjects;
 using Entities.Exceptions;
 using Entities.Models;
 using Entities.RequestFeatures;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ActionFilters;
 using Services.Contracts;
@@ -25,6 +26,7 @@ namespace Presentation.Controller
             _manager = manager;
         }
 
+        [HttpHead]
         [HttpGet("[action]")]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetAllBooksAsync([FromQuery] BookParameters bookParameters)
@@ -76,6 +78,14 @@ namespace Presentation.Controller
             await _manager.BookService.DeleteOneBookAsync(id, false);
 
             return NoContent();
+        }
+
+       // [Authorize]
+        [HttpOptions]
+        public IActionResult GetBooksOptions()
+        {
+            Response.Headers.Add("Allow", "GET, PUT, POST, PATCH, DELETE, HEAD, OPTIONS");
+            return Ok();
         }
 
     }
