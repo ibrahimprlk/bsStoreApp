@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using Presentation.ActionFilters;
+using Services;
 using Services.Contracts;
 using WebApi.Extensions;
 using WebAPI.Extensions;
@@ -37,6 +38,8 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.ConfigureActionFilters();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureDataShaper();
+builder.Services.AddCustomMediaTypes();
+builder.Services.AddScoped<IBookLinks, BookLinks>();
 
 var app = builder.Build();
 
