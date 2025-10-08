@@ -30,6 +30,7 @@ namespace Presentation.Controller
             _manager = manager;
         }
 
+        [Authorize]
         [HttpHead]
         [HttpGet("[action]")]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
