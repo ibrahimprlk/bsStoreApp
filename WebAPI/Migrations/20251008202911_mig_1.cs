@@ -34,6 +34,8 @@ namespace WebAPI.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -66,6 +68,19 @@ namespace WebAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -175,6 +190,16 @@ namespace WebAPI.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "41d00d33-02e9-4136-b0be-95c01d64e659", null, "Editor", "EDITOR" },
+                    { "94ed51c6-0fd8-430c-954c-e78363f92671", null, "Admin", "ADMIN" },
+                    { "b21b1077-a91a-4519-b1d8-9cce279eea6b", null, "User", "USER" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Books",
                 columns: new[] { "Id", "Price", "Title" },
                 values: new object[,]
@@ -182,6 +207,16 @@ namespace WebAPI.Migrations
                     { 1, 350m, "Hacivat ve karagöz" },
                     { 2, 400m, "La Fonteden Masallar" },
                     { 3, 800m, "Harry Potter" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "CategoryId", "CategoryName" },
+                values: new object[,]
+                {
+                    { 1, "Computer Science" },
+                    { 2, "Network" },
+                    { 3, "Database Management Systems" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -244,6 +279,9 @@ namespace WebAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Books");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

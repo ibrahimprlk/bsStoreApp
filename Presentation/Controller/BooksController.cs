@@ -9,6 +9,7 @@ using Entities.Exceptions;
 using Entities.Models;
 using Entities.RequestFeatures;
 using Marvin.Cache.Headers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ActionFilters;
@@ -30,7 +31,7 @@ namespace Presentation.Controller
             _manager = manager;
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpHead]
         [HttpGet("[action]")]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
@@ -94,5 +95,13 @@ namespace Presentation.Controller
             return Ok();
         }
 
+       // [Authorize]
+        [HttpGet("details")]
+        public async Task<IActionResult> GetAllBooksWithDetailsAsync()
+        {
+            return Ok(await _manager
+                .BookService
+                .GetAllBooksWithDetailsAsync(false));
+        }
     }
 }

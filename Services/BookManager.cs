@@ -15,23 +15,30 @@ using Services.Contracts;
 
 namespace Services
 {
-    internal class BookManager : IBookService
+    public class BookManager : IBookService
     {
+        private readonly ICategoryService _categoryService;
         private readonly IRepositoryManager _repositoryManager;
-        private readonly ILoggerService _loggerService;
+        private readonly ILoggerService _logger;
         private readonly IMapper _mapper;
         private readonly IBookLinks _bookLinks;
 
-        public BookManager(IRepositoryManager repositoryManager, ILoggerService loggerService, IMapper mapper, IBookLinks bookLinks = null)
+        public BookManager(IRepositoryManager manager,
+            ILoggerService logger,
+            IMapper mapper,
+            IBookLinks bookLinks,
+            ICategoryService categoryService)
         {
-            _repositoryManager = repositoryManager;
-            _loggerService = loggerService;
+            _repositoryManager = manager;
+            _logger = logger;
             _mapper = mapper;
             _bookLinks = bookLinks;
+            _categoryService = categoryService;
         }
 
         public async Task<BookDto> CreateOneBookAsync(BookDtoForInsertion bookDto)
         {
+            var category = _repositoryManager.Category.GetOneCategoryByIdAsync(bookDto.CategoryId,false);
             var entity = _mapper.Map<Book>(bookDto);
             await _repositoryManager.Book.CreateAsync(entity);
             await _repositoryManager.SaveAsync();
@@ -95,6 +102,13 @@ namespace Services
                 throw new BookNotFoundException(id);
 
             return entity;
+        }
+
+        public async Task<IEnumerable<Book>> GetAllBooksWithDetailsAsync(bool trackChanges)
+        {
+            return await _repositoryManager
+                .Book
+                .GetAllBooksWithDetailsAsync(trackChanges);
         }
     }
 }
